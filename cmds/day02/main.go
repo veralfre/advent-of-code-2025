@@ -28,7 +28,9 @@ func main() {
 	scanner.Scan()
 	rangeStr := scanner.Text()
 	idRanges := idranges.FromString(rangeStr)
-	totalInvalidIds := idranges.ComputeTotalInvalidIds(idRanges)
+	totalInvalidIds := idranges.ComputeTotalInvalidIdsPart1(idRanges)
 	fmt.Printf("Sum of invalid IDs: %d\n", totalInvalidIds)
+	totalInvalidIds = idranges.ComputeTotalInvalidIdsPart2(idRanges)
+	fmt.Printf("Sum of invalid IDs (part 2): %d\n", totalInvalidIds)
 
 }

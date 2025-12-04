@@ -23,7 +23,7 @@ func NewIdRange(start, end int) *IdRange {
 // 99 is not valid
 // 6464 is not valid
 // 123123 is not valid
-func (r *IdRange) InvalidIds() []int {
+func (r *IdRange) InvalidIdsPart1() []int {
 	invalidIds := []int{}
 	for id := r.start; id <= r.end; id++ {
 		idStr := strconv.Itoa(id)
@@ -34,6 +34,27 @@ func (r *IdRange) InvalidIds() []int {
 				substr += substr
 			}
 			if substr == idStr {
+				invalidIds = append(invalidIds, id)
+				break
+			}
+		}
+
+	}
+	return invalidIds
+}
+
+func (r *IdRange) InvalidIdsPart2() []int {
+	invalidIds := []int{}
+	for id := r.start; id <= r.end; id++ {
+		idStr := strconv.Itoa(id)
+		idLen := len(idStr)
+		for i := 1; i < idLen; i++ {
+			substr := string(idStr[0:i])
+			acc := ""
+			for len(acc) < idLen {
+				acc += substr
+			}
+			if acc == idStr {
 				invalidIds = append(invalidIds, id)
 				break
 			}
@@ -59,10 +80,21 @@ func FromString(rangeStr string) []IdRange {
 	return outputRanges
 }
 
-func ComputeTotalInvalidIds(ranges []IdRange) int {
+func ComputeTotalInvalidIdsPart1(ranges []IdRange) int {
 	totalInvalidIds := 0
 	for _, idRange := range ranges {
-		invalidIds := idRange.InvalidIds()
+		invalidIds := idRange.InvalidIdsPart1()
+		for _, invalidId := range invalidIds {
+			totalInvalidIds += invalidId
+		}
+	}
+	return totalInvalidIds
+}
+
+func ComputeTotalInvalidIdsPart2(ranges []IdRange) int {
+	totalInvalidIds := 0
+	for _, idRange := range ranges {
+		invalidIds := idRange.InvalidIdsPart2()
 		for _, invalidId := range invalidIds {
 			totalInvalidIds += invalidId
 		}
