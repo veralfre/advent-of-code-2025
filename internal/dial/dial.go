@@ -54,8 +54,8 @@ func (d *Dial) Turn(direction string, steps int) int {
 		turnOvers--
 	}
 
-	// If we started at 0 going left, we don't count the immediate "crossing"
-	if startedAtZero && direction == "L" && turnOvers > 0 {
+	// If we started at 0, we don't count leaving 0 as a crossing
+	if startedAtZero && turnOvers > 0 {
 		turnOvers--
 	}
 
