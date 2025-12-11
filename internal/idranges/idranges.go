@@ -18,6 +18,34 @@ func NewIdRange(start, end int) *IdRange {
 	}
 }
 
+func (r *IdRange) Start() int {
+	return r.start
+}
+
+func (r *IdRange) End() int {
+	return r.end
+}
+
+func (r *IdRange) IsInRange(id int) bool {
+	return id >= r.start && id <= r.end
+}
+
+func (r *IdRange) CanMerge(other *IdRange) bool {
+	// two ranges can merge if they overlap or touch
+	return r.start <= other.end+1 && other.start <= r.end+1
+}
+
+func (r *IdRange) Merge(other *IdRange) *IdRange {
+	newStart := r.start
+	if other.start < newStart {
+		newStart = other.start
+	}
+	newEnd := r.end
+	if other.end > newEnd {
+		newEnd = other.end
+	}
+	return NewIdRange(newStart, newEnd)
+}
 // for all ids in the range, if there is any id with duplicate digits, return false
 // 55 is not valid
 // 99 is not valid
@@ -80,6 +108,8 @@ func FromString(rangeStr string) []IdRange {
 	return outputRanges
 }
 
+//  External API 
+
 func ComputeTotalInvalidIdsPart1(ranges []IdRange) int {
 	totalInvalidIds := 0
 	for _, idRange := range ranges {
@@ -101,3 +131,4 @@ func ComputeTotalInvalidIdsPart2(ranges []IdRange) int {
 	}
 	return totalInvalidIds
 }
+

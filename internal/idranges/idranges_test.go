@@ -24,6 +24,56 @@ func TestInvalidIds(t *testing.T) {
 	}
 }
 
+// 3-5
+// 10-14
+// 16-20
+// 12-18
+
+func TestIsInRange(t *testing.T) {
+	idRanges := []*idranges.IdRange{
+		idranges.NewIdRange(3, 5),
+		idranges.NewIdRange(10, 14),
+		idranges.NewIdRange(16, 20),
+		idranges.NewIdRange(12, 18),
+		}
+	ingredients := []int{1,5,8,11,17,32}
+	expectedResults := []bool{false, true, false, true, true, false}
+	totalFresh := 0
+	expectedFresh := 3
+	for i, ingredient := range ingredients {
+		isInAnyRange := false
+		for _, idRange := range idRanges {
+			if idRange.IsInRange(ingredient) {
+				isInAnyRange = true
+				break
+			}
+		}
+		if isInAnyRange != expectedResults[i] {
+			t.Errorf("For ingredient %d, expected %v but got %v", ingredient, expectedResults[i], isInAnyRange)
+		}
+		if !isInAnyRange {
+			totalFresh++
+		}
+	}
+	if totalFresh != expectedFresh {
+		t.Errorf("Expected total fresh %d but got %d", expectedFresh, totalFresh)
+	}
+
+	idRanges = []*idranges.IdRange{
+		idranges.NewIdRange(3, 5),
+		idranges.NewIdRange(10, 20),
+		}
+
+	totalAllowedIngredients := 0 
+	for _, r := range idRanges {
+		totalAllowedIngredients += r.End() - r.Start() + 1
+	}
+	if totalAllowedIngredients != 14 {
+		t.Errorf("Expected total fresh %d but got %d", expectedFresh, totalFresh)
+	}
+
+}
+
 func TestProvidedRanges(t *testing.T) {
 	// 11-22 has two invalid IDs, 11 and 22.
 	// 95-115 has one invalid ID, 99.
